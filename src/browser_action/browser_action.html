@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tag it</title>
+    <script src="/js/jquery/jquery.min.js"></script>
+    <script src="/js/tagging.min.js"></script>
+		<script src="/js/tagit.js"></script>
+
+		<style type="text/css">
+    textarea:focus, input:focus{
+        outline: none;
+    }
+    body {
+      margin: 0;
+      background: #29abe2; /* Old browsers */
+      background: -moz-linear-gradient(-45deg, #29abe2 0%, #00ffff 100%); /* FF3.6-15 */
+      background: -webkit-linear-gradient(-45deg, #29abe2 0%,#00ffff 100%); /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(135deg, #29abe2 0%,#00ffff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#29abe2', endColorstr='#00ffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+      width: 300px;
+      padding: 17px;
+    }
+    #mainPopup {
+      font-family: Helvetica, Ubuntu, Arial, sans-serif;
+      /*background: #f3f3f3;*/
+      height: 100%;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    img {
+      display: block;
+       margin-left: 15px;
+    }
+    label {
+      width: 100%;
+      font-size: 14px;
+      float: left;
+    }
+    .url, .tags {
+      margin: 10px 14px;
+    }
+    .url input {
+      color: #444444;
+      font-style: italic;
+      border: 0px #4D4D4D solid;
+      font-size: 12px;
+      padding: 10px;
+      border-radius: 3px;
+      background: #eaeaea;
+      width: 92%;
+    }
+    .tags {
+      width: 85%;
+      color: #444444;
+      font-style: italic;
+      font-size: 12px;
+      border-radius: 3px;
+    }
+    #tagButton{
+      background: #00CC80;
+      border: none;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #ffffff;
+      font-weight: bold;
+      margin: 0 14px 13px;
+      padding: 10px;
+      width: 91%;
+      border-radius: 3px;
+      height: 37px;
+    }
+    .tag {
+      float: left;
+      padding: 2px;
+      border: 0px solid #eaeaea;
+      color: #444444;
+      font-size: 13px;
+      position: relative;
+      bottom: 3px;
+      margin-bottom: 6px;
+      border-bottom: 2px solid #444444;
+      font-style: italic;
+      margin-right: 10px;
+    }
+    .tag a {
+          margin-left: 6px;
+    background: #c3c3c3;
+    padding: 1px 4px;
+    color: #4d4d4d;
+    position: relative;
+    bottom: 1px;
+    border-radius: 13px;
+    font-size: 11px;
+    }
+    .tag a:hover {
+      cursor: pointer;    
+      }
+    .tag span, .tag a {
+      display: none;
+    }
+    .hidden{
+      display: none;
+    }
+    #success {
+      background: #00CC7F;
+      position: absolute;
+      z-index: 100;
+      width: 100%;
+      height: 100%;
+    }
+    #success img {
+      display: block;
+      margin: auto;
+      top: 22%;
+      position: relative;
+    }
+    #success p {
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      position: relative;
+      top: 55px;
+      text-align: center;
+    }
+    .spinner img {
+      position: absolute;
+      bottom: 7%;
+      left: 46%;
+    }
+  </style>
+  </head>
+  <body>
+    <div id="success" class="hidden">
+      <img src="../../img/success.png" alt="">
+      <p>SUCCESS</pn>
+    </div>
+    <div class="spinner hidden">
+      <img src="../../img/balls.svg" alt="">
+    </div>
+		<div id="mainPopup">
+      <img src="../../img/logo.png" alt="">
+      <div class="url">
+        <!--<label for="">Url</label>-->
+        <input type="text" id="urlpath" value="fda" disabled />
+      </div>
+			<div class="tags">
+        <!--<label for="">Tags</label>-->
+				<!--<input type="text" id="tags" placeholder="seperate tags with comma" />-->
+        <div data-tags-input-name="tag" id="tags" placeholder="seperate tags with tab"></div>
+        
+			</div>
+        <button id="tagButton">tag</button>
+
+		</div>
+
+  </body>
+</html>
