@@ -36,7 +36,7 @@ function clickHandler(e) {
             url: 'http://localhost:5000/article',
             type: 'post',
             data: {
-              url: tags,
+              url, tags
             },
             headers: {
               Authorization: `Bearer ${token}`
