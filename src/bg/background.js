@@ -11,3 +11,18 @@ chrome.extension.onMessage.addListener(
   	chrome.pageAction.show(sender.tab.id);
     sendResponse();
   });
+
+// chrome.runtime.onMessageExternal.addListener(
+//   function(request, sender, sendResponse) {
+//     console.log('test');
+//     console.log({ request });
+//     chrome.storage.sync.set({ token: request });			
+//     sendResponse();
+//   }
+// );
+
+chrome.runtime.onMessageExternal.addListener(function(request, sender, sendResponse) {  
+  var token = request;
+  chrome.storage.sync.set({ key: token });
+  sendResponse({ token });
+});
