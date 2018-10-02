@@ -27,16 +27,18 @@ function clickHandler(e) {
           $(".tag span").add($(".tag a")).remove();
           const tags = [];
           $(".tag").each(function(){ 
-            tags.push($(this).text());
+            tags.push($(this).text().trim());
           });
+
           $("#tagButton").text("")
           $(".spinner").removeClass("hidden");
-
+          
           $.ajax({
             url: 'http://localhost:5000/article',
             type: 'post',
             data: {
-              url, tags
+              url, 
+              tags: JSON.stringify(tags),
             },
             headers: {
               Authorization: `Bearer ${token}`
@@ -51,22 +53,8 @@ function clickHandler(e) {
               alert( "error" );
             },
           });
-
-          // $.post('http://localhost:5000/article', { url, tags })
-          // .done( function() {
-          //   $(".spinner").addClass("hidden")
-          //   $("#tagButton").text("tag")
-          //   $("#success").removeClass("hidden");
-          // })
-          // .fail(function() {
-          //   alert( "error" );
-          // });
-
         }  
-
       });
-
-     
     }
   );
 }
