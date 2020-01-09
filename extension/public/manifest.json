@@ -15,32 +15,22 @@
   "default_locale": "en",
   "background": {
     "scripts": [
-      "src/bg/background.js"
+      "app/background.js"
     ],
     "persistent": false
   },
   "browser_action": {
     "default_icon": "icons/icon19.png",
-    "default_title": "browser action demo",
-    "default_popup": "src/browser_action/browser_action.html"
+    "default_title": "tagit extension",
+    "default_popup": "index.html"
   },
   "permissions": [
-    "bookmarks",
-    "chrome://favicon/",
-    "clipboardRead",
-    "clipboardWrite",
     "contentSettings",
     "contextMenus",
     "cookies",
+    "chrome://extensions/",
     /*"fileBrowserHandler",*/
-    "tts",
-    "ttsEngine",
-    "history",
-    "idle",
-    "management",
-    "notifications",
     "tabs",
-    "geolocation",
     "storage",
     "http://localhost:3000/*",
     "http://localhost:5000/*"
@@ -51,7 +41,7 @@
         "https://www.google.com/*"
       ],
       "css": [
-        "src/inject/inject.css"
+        "app/inject.css"
       ]
     },
     {
@@ -59,7 +49,7 @@
         "https://www.google.com/*"
       ],
       "js": [
-        "src/inject/inject.js"
+        "app/inject.js"
       ]
     }
   ]  

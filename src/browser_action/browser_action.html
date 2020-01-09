@@ -12,13 +12,10 @@
     }
     body {
       margin: 0;
-      background: #29abe2; /* Old browsers */
-      background: -moz-linear-gradient(-45deg, #29abe2 0%, #00ffff 100%); /* FF3.6-15 */
-      background: -webkit-linear-gradient(-45deg, #29abe2 0%,#00ffff 100%); /* Chrome10-25,Safari5.1-6 */
-      background: linear-gradient(135deg, #29abe2 0%,#00ffff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#29abe2', endColorstr='#00ffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+      background: #fff;
+      height: 200px;
       width: 300px;
-      padding: 17px;
+      padding: 30px;
     }
     #mainPopup {
       font-family: Helvetica, Ubuntu, Arial, sans-serif;
@@ -38,11 +35,10 @@
       float: left;
     }
     .url, .tags {
-      margin: 10px 14px;
+      margin: 28px 14px;
     }
     .url input {
       color: #444444;
-      font-style: italic;
       border: 0px #4D4D4D solid;
       font-size: 12px;
       padding: 10px;
@@ -53,7 +49,6 @@
     .tags {
       width: 85%;
       color: #444444;
-      font-style: italic;
       font-size: 12px;
       border-radius: 3px;
     }
@@ -73,15 +68,15 @@
     .tag {
       float: left;
       padding: 2px;
-      border: 0px solid #eaeaea;
-      color: #444444;
+      border: 1px solid #5649CF;
+      border-radius: 50px;
+      color: #5649CF;
       font-size: 13px;
       position: relative;
       bottom: 3px;
       margin-bottom: 6px;
-      border-bottom: 2px solid #444444;
-      font-style: italic;
       margin-right: 10px;
+      padding: 6px 12px;
     }
     .tag a {
           margin-left: 6px;
@@ -142,7 +137,7 @@
       <img src="../../img/balls.svg" alt="">
     </div>
 		<div id="mainPopup">
-      <img src="../../img/logo.png" alt="">
+      <img style="margin-bottom: 20px" src="../../img/logo.svg" alt="">
       <div class="url">
         <!--<label for="">Url</label>-->
         <input type="text" id="urlpath" value="fda" disabled />
