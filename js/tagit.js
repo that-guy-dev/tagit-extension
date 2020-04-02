@@ -1,13 +1,12 @@
 (function( $, window, document, undefined ) {
-    $( document ).ready(function() {
-        var t = $( "#tags" ).tagging();
-        
+    $(document).ready(function() {
+        var t = $( "#tags" ).tagging();        
         chrome.storage.sync.get(['key'], function(result) {        
           if (!result.key) {
             $("#login").removeClass("hidden");
             $("#mainPopup").addClass("hidden");
           }
-        });                
+        });
     });
 })( window.jQuery, window, document );
 

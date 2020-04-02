@@ -4,7 +4,7 @@
     <title>Tag it</title>
     <script src="/js/jquery/jquery.min.js"></script>
     <script src="/js/tagging.min.js"></script>
-		<script src="/js/tagit.js"></script>
+    <script src="/js/tagit.js"></script>    
 
 		<style type="text/css">
     textarea:focus, input:focus{
@@ -127,7 +127,8 @@
   </head>
   <body>
     <div id="login" class="hidden">
-      <h2>You need to login</h2>
+      <h2>You need to login a</h2>
+      <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
     </div>
     <div id="success" class="hidden">
       <img src="../../img/success.png" alt="">
@@ -138,6 +139,7 @@
     </div>
 		<div id="mainPopup">
       <img style="margin-bottom: 20px" src="../../img/logo.svg" alt="">
+
       <div class="url">
         <!--<label for="">Url</label>-->
         <input type="text" id="urlpath" value="fda" disabled />
@@ -150,7 +152,29 @@
 			</div>
         <button id="tagButton">tag</button>
 
-		</div>
+    </div>
+    
+    <!-- <script>
+      function onSuccess(googleUser) {
+        console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+      }
+      function onFailure(error) {
+        console.log(error);
+      }
+      function renderButton() {
+        alert('reder');
+        gapi.signin2.render('my-signin2', {
+          'scope': 'profile email',
+          'width': 240,
+          'height': 50,
+          'longtitle': true,
+          'theme': 'dark',
+          'onsuccess': onSuccess,
+          'onfailure': onFailure
+        });
+      }
+    </script> -->
 
-  </body>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+  </body>  
 </html>

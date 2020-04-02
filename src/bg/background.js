@@ -10,7 +10,7 @@ chrome.extension.onMessage.addListener(
   function(request, sender, sendResponse) {
   	chrome.pageAction.show(sender.tab.id);
     sendResponse();
-  });
+});
 
 // chrome.runtime.onMessageExternal.addListener(
 //   function(request, sender, sendResponse) {
@@ -20,6 +20,10 @@ chrome.extension.onMessage.addListener(
 //     sendResponse();
 //   }
 // );
+
+chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
+  // Use the token.
+});
 
 chrome.runtime.onMessageExternal.addListener(function(request, sender, sendResponse) {  
   var token = request;
