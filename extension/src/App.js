@@ -109,14 +109,14 @@ const App = () => {
   
   useEffect(() => {   
 
-    if(!localStorage.token)
-    {
+    // if(!localStorage.token)
+    // {
       if(chrome.identity) {
         chrome.identity.getAuthToken({interactive: true}, (access_token) => {
           localGoogleLogin(access_token);
         });  
       }
-    }    
+    // }    
 
   }, []);
 
