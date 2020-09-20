@@ -1,9 +1,11 @@
 {
   "name": "Tagit extension",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "manifest_version": 2,
+  "key": "ejfcngmflihodglkhhgchafaejipfmmm",
   "description": "The official tagit extension, save and view later",
-  "homepage_url": "http://extensionizr.com",
+  "homepage_url": "http://tagit.io",
+  "content_security_policy": "font-src 'self' https://fonts.gstatic.com;frame-src 'self';img-src 'self';manifest-src 'self';media-src 'self' blob:;object-src 'self';script-src 'self' 'sha256-k6pV2csTYIQ8fwVNaLjYOTphB1rzl8yIg1do5U0bKRY=' 'sha256-FJLSjx1rhnAk8XlOhsZyYTRtkTvG9Uq53BROEdempuw=' 'sha256-QRor8Jrd4PQ2eLdc+q7QKB7JZfYQq5mb/Lorx5c+hXw=' https://apis.google.com;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;worker-src 'self';",
   "externally_connectable": {
     "matches": ["http://localhost:3000/*"]
   },
@@ -12,45 +14,22 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "default_locale": "en",
-  "background": {
-    "scripts": [
-      "app/background.js"
-    ],
-    "persistent": false
-  },
   "browser_action": {
-    "default_icon": "icons/icon19.png",
-    "default_title": "tagit extension",
-    "default_popup": "index.html"
+    "default_popup": "index.html",
+    "default_title": "Tagit"
   },
+  "oauth2": {
+    "client_id": "573420265403-hc69a7r355vc002igjo6dfemj6ac14o4.apps.googleusercontent.com",
+    "scopes":["openid", "email", "profile"]
+  }, 
   "permissions": [
-    "contentSettings",
-    "contextMenus",
+    "identity",
+    "chrome://favicon/",
     "cookies",
-    "chrome://extensions/",
-    /*"fileBrowserHandler",*/
-    "tabs",
+    "idle",
     "storage",
+    "tabs",
     "http://localhost:3000/*",
     "http://localhost:5000/*"
-  ],
-  "content_scripts": [
-    {
-      "matches": [
-        "https://www.google.com/*"
-      ],
-      "css": [
-        "app/inject.css"
-      ]
-    },
-    {
-      "matches": [
-        "https://www.google.com/*"
-      ],
-      "js": [
-        "app/inject.js"
-      ]
-    }
-  ]  
+  ]
 }
