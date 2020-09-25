@@ -5,7 +5,7 @@
   "key": "ejfcngmflihodglkhhgchafaejipfmmm",
   "description": "The official tagit extension, save and view later",
   "homepage_url": "http://tagit.io",
-  "content_security_policy": "font-src 'self' https://fonts.gstatic.com;frame-src 'self';img-src 'self';manifest-src 'self';media-src 'self' blob:;object-src 'self';script-src 'self' 'sha256-k6pV2csTYIQ8fwVNaLjYOTphB1rzl8yIg1do5U0bKRY=' 'sha256-FJLSjx1rhnAk8XlOhsZyYTRtkTvG9Uq53BROEdempuw=' 'sha256-QRor8Jrd4PQ2eLdc+q7QKB7JZfYQq5mb/Lorx5c+hXw=' https://apis.google.com;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;worker-src 'self';",
+  "content_security_policy": "font-src 'self' https://fonts.gstatic.com;frame-src 'self';img-src 'self';manifest-src 'self';media-src 'self' blob:;object-src 'self';script-src 'self' https://apis.google.com;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;worker-src 'self';",
   "externally_connectable": {
     "matches": ["http://localhost:3000/*"]
   },
@@ -18,10 +18,16 @@
     "default_popup": "index.html",
     "default_title": "Tagit"
   },
+  "background": {
+    "scripts": [
+      "message.js"
+    ],
+    "persistent": false
+  },
   "oauth2": {
     "client_id": "573420265403-hc69a7r355vc002igjo6dfemj6ac14o4.apps.googleusercontent.com",
     "scopes":["openid", "email", "profile"]
-  }, 
+  },   
   "permissions": [
     "identity",
     "chrome://favicon/",

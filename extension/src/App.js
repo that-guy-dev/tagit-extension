@@ -62,13 +62,6 @@ const tagifyCallbacks = {
 
 axios.defaults.baseURL = 'http://localhost:5000/';
 
-// chrome.storage.sync.get(['key'], function(result) {        
-//   if (!result.key) {
-//    console.log('no key');
-//   }
-//   console.log(result.key);
-// }); 
-
 // fetch()
   //   .then(data => {
   //     const tags = data.map(tag => tag.tag);
@@ -90,34 +83,20 @@ axios.defaults.baseURL = 'http://localhost:5000/';
   //   });
   // }  
 
-  const localGoogleLogin = access_token => {
-    axios
-      .post('/auth/google', { access_token })
-      .then((response) => {
-        const token = response.headers['x-auth-token'];        
-        localStorage.setItem('token', token);
-        console.log({ token });
-      }).then(() => {      
-      })
-      .catch((error) => {        
-      });
-  };
-
-  
 const App = () => {      
+  const [token, setToken] = useState();
   const [localState, setLocalState] = useState([]);
   
-  useEffect(() => {   
-
-    // if(!localStorage.token)
-    // {
-      if(chrome.identity) {
-        chrome.identity.getAuthToken({interactive: true}, (access_token) => {
-          localGoogleLogin(access_token);
-        });  
+  useEffect(() => {
+    // chrome.storage.sync.remove(['key'], (token) => {
+    //   console.log(token);
+    // });    
+    chrome.storage.sync.get(['key'], (result) => {
+      console.log(result.key);
+      if(result.key) {
+        setToken(result.key);
       }
-    // }    
-
+    });     
   }, []);
 
   const settings = {
@@ -126,23 +105,31 @@ const App = () => {
     callbacks: tagifyCallbacks
   };
 
+
   const save = () => {
-
     chrome.tabs.query({currentWindow: true, active: true}, (tabs) => {
-
       const { url } = tabs[0];      
       const tags = JSON.stringify([]);
 
       axios
-        .post('/article', { url, tags },  { headers: { Authorization: `Bearer ${localStorage.token}` } })
+        .post('/article', { url, tags },  { headers: { Authorization: `Bearer ${token}` } })
         .then((response) => {
           console.log(response);
         })
         .catch((error) => {     
           console.log(error);   
         });
-
     });
+  }
+
+  if(!token)
+  {    
+    return (
+      <Wrapper>
+        <img src={Logo} />
+        <Button onClick={() => window.open('http://localhost:3000/login', '_blank')}>Login/register</Button>
+      </Wrapper>
+    )
   }
 
   return (
