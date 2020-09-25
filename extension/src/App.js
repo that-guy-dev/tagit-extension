@@ -89,9 +89,6 @@ const App = () => {
   const [localState, setLocalState] = useState([]);
   
   useEffect(() => {
-    // chrome.storage.sync.remove(['key'], (token) => {
-    //   console.log(token);
-    // });    
     chrome.storage.sync.get(['key'], (result) => {
       if(result.key) {
         setToken(result.key);
@@ -121,13 +118,8 @@ const App = () => {
           .catch((error) => {     
             console.log(error);   
           });
-      }
-      
+      }      
     });
-  }
-
-  const onChangeTags = (e) => {
-    setTags(e.target.value);
   }
 
   if(!token)
@@ -149,7 +141,7 @@ const App = () => {
         showDropdown={localState.showDropdown}
       />
       		       
-      <input onChange={onChangeTags} type="text" />
+      <input onChange={(e) => setTags(e.target.value)} type="text" />
     
       <Button onClick={save}>Save to tagit</Button>
     </Wrapper>
