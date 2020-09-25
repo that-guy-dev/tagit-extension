@@ -85,6 +85,7 @@ axios.defaults.baseURL = 'http://localhost:5000/';
 
 const App = () => {      
   const [token, setToken] = useState();
+  const [tags, setTags] = useState("");
   const [localState, setLocalState] = useState([]);
   
   useEffect(() => {
@@ -92,7 +93,6 @@ const App = () => {
     //   console.log(token);
     // });    
     chrome.storage.sync.get(['key'], (result) => {
-      console.log(result.key);
       if(result.key) {
         setToken(result.key);
       }
@@ -107,19 +107,27 @@ const App = () => {
 
 
   const save = () => {
-    chrome.tabs.query({currentWindow: true, active: true}, (tabs) => {
-      const { url } = tabs[0];      
-      const tags = JSON.stringify([]);
-
-      axios
-        .post('/article', { url, tags },  { headers: { Authorization: `Bearer ${token}` } })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {     
-          console.log(error);   
-        });
+    chrome.tabs.query({currentWindow: true, active: true}, (tabs) => {      
+      const { url } = tabs[0];
+      
+      if(url) {
+         const data = tags.split(",").map(tag => tag.trim());
+         console.log(JSON.stringify(data));
+         axios
+          .post('/article', { url, tags: JSON.stringify(data) },  { headers: { Authorization: `Bearer ${token}` } })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {     
+            console.log(error);   
+          });
+      }
+      
     });
+  }
+
+  const onChangeTags = (e) => {
+    setTags(e.target.value);
   }
 
   if(!token)
@@ -141,7 +149,7 @@ const App = () => {
         showDropdown={localState.showDropdown}
       />
       		       
-      <input type="text" />
+      <input onChange={onChangeTags} type="text" />
     
       <Button onClick={save}>Save to tagit</Button>
     </Wrapper>

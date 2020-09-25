@@ -30,11 +30,10 @@
   },   
   "permissions": [
     "identity",
-    "chrome://favicon/",
-    "cookies",
-    "idle",
     "storage",
     "tabs",
+    "chrome://favicon/",    
+    "idle",     
     "http://localhost:3000/*",
     "http://localhost:5000/*"
   ]
