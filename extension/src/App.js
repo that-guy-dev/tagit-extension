@@ -81,18 +81,18 @@ axios.defaults.baseURL = 'http://localhost:5000/';
   //     }))
   //   });
 
-// const fetch = () => {
-  // return axios
-  //   .get('tag', { headers: { Authorization: `Bearer ${localStorage.token}` } })
-  //   .then((response) => {
-  //     const { tags } = response.data;
-  //     const ordered = _.orderBy(tags);
-  //     return ordered;
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
-  // }  
+const fetch = () => {
+  return axios
+    .get('tag', { headers: { Authorization: `Bearer ${localStorage.token}` } })
+    .then((response) => {
+      const { tags } = response.data;
+      const ordered = _.orderBy(tags);
+      return ordered;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}  
 
 const App = () => {      
   const [token, setToken] = useState();
