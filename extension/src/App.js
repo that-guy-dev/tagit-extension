@@ -21,6 +21,17 @@ margin: 15px 0;
   }
 `;
 
+const Input = styled.input`
+  height: 20px;
+  color: #444444;
+  font-style: italic;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 96%;  
+`;
+
 const Button = styled.div`
   background: #5649CF;
   display: flex;
@@ -109,7 +120,6 @@ const App = () => {
       
       if(url) {
          const data = tags.split(",").map(tag => tag.trim());
-         console.log(JSON.stringify(data));
          axios
           .post('/article', { url, tags: JSON.stringify(data) },  { headers: { Authorization: `Bearer ${token}` } })
           .then((response) => {
@@ -140,8 +150,12 @@ const App = () => {
         value={localState.value}
         showDropdown={localState.showDropdown}
       />
-      		       
-      <input onChange={(e) => setTags(e.target.value)} type="text" />
+      <div style={{ paddingBottom: 10}}>
+        <Input
+          onChange={(e) => setTags(e.target.value)} type="text"
+          placeholder="seperate tags with tab"
+        />
+      </div>		       
     
       <Button onClick={save}>Save to tagit</Button>
     </Wrapper>
