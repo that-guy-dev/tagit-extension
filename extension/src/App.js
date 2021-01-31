@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from 'styled-components';
-import Tags from "@yaireo/tagify/dist/react.tagify";
+
 import Logo from "./assets/logo.svg";
+import Tags from "@yaireo/tagify/dist/react.tagify";
 import _ from 'lodash';
 import axios from 'axios';
 
@@ -19,6 +20,17 @@ margin: 15px 0;
   > span {
     padding-left: 0px;
   }
+`;
+
+const Input = styled.input`
+  height: 20px;
+  color: #444444;
+  font-style: italic;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 96%;  
 `;
 
 const Button = styled.div`
@@ -62,13 +74,6 @@ const tagifyCallbacks = {
 
 axios.defaults.baseURL = 'http://localhost:5000/';
 
-// chrome.storage.sync.get(['key'], function(result) {        
-//   if (!result.key) {
-//    console.log('no key');
-//   }
-//   console.log(result.key);
-// }); 
-
 // fetch()
   //   .then(data => {
   //     const tags = data.map(tag => tag.tag);
@@ -104,8 +109,9 @@ const fetch = () => {
           });
       };
 
-  
 const App = () => {      
+  const [token, setToken] = useState();
+  const [tags, setTags] = useState("");
   const [localState, setLocalState] = useState([]);
   
   useEffect(() => {       
@@ -124,23 +130,33 @@ const App = () => {
     callbacks: tagifyCallbacks
   };
 
+
   const save = () => {
-
-    chrome.tabs.query({currentWindow: true, active: true}, (tabs) => {
-
-      const { url } = tabs[0];      
-      const tags = JSON.stringify([]);
-
-      axios
-        .post('/article', { url, tags },  { headers: { Authorization: `Bearer ${localStorage.token}` } })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {     
-          console.log(error);   
-        });
-
+    chrome.tabs.query({currentWindow: true, active: true}, (tabs) => {      
+      const { url } = tabs[0];
+      
+      if(url) {
+         const data = tags.split(",").map(tag => tag.trim());
+         axios
+          .post('/article', { url, tags: JSON.stringify(data) },  { headers: { Authorization: `Bearer ${token}` } })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {     
+            console.log(error);   
+          });
+      }      
     });
+  }
+
+  if(!token)
+  {    
+    return (
+      <Wrapper>
+        <img src={Logo} />
+        <Button onClick={() => window.open('http://localhost:3000/login', '_blank')}>Login/register</Button>
+      </Wrapper>
+    )
   }
 
   return (
