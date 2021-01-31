@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled, { css } from 'styled-components';
-// import Tags from "@yaireo/tagify/dist/react.tagify";
+import Tags from "@yaireo/tagify/dist/react.tagify";
 import Logo from "./assets/logo.svg";
 import _ from 'lodash';
 import axios from 'axios';
@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   padding: 30px;
 `;
 
-const Tag = styled.div`
+const Tag = styled(Tags)`
 background: #fff;
 margin: 15px 0;
   > span {
@@ -77,48 +77,46 @@ axios.defaults.baseURL = 'http://localhost:5000/';
   //     }))
   //   });
 
-// const fetch = () => {
-  // return axios
-  //   .get('tag', { headers: { Authorization: `Bearer ${localStorage.token}` } })
-  //   .then((response) => {
-  //     const { tags } = response.data;
-  //     const ordered = _.orderBy(tags);
-  //     return ordered;
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
-  // }  
+const fetch = () => {
+  return axios
+    .get('tag', { headers: { Authorization: `Bearer ${localStorage.token}` } })
+    .then((response) => {
+      const { tags } = response.data;
+      const ordered = _.orderBy(tags);
+      return ordered;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }  
 
   const localGoogleLogin = access_token => {
-    axios
-      .post('/auth/google', { access_token })
-      .then((response) => {
-        const token = response.headers['x-auth-token'];        
-        localStorage.setItem('token', token);
-        console.log({ token });
-      }).then(() => {      
-      })
-      .catch((error) => {        
-      });
-  };
+        axios
+          .post('/auth/google', { access_token })
+          .then((response) => {
+            console.log(response);
+            const token = response.headers['x-auth-token'];        
+            localStorage.setItem('token', token);
+            console.log({ token });
+          })
+          .catch((error) => {        
+            console.log(error);
+          });
+      };
 
   
 const App = () => {      
   const [localState, setLocalState] = useState([]);
   
-  useEffect(() => {   
-
-    // if(!localStorage.token)
-    // {
-      if(chrome.identity) {
-        chrome.identity.getAuthToken({interactive: true}, (access_token) => {
-          localGoogleLogin(access_token);
-        });  
-      }
-    // }    
-
-  }, []);
+  useEffect(() => {       
+      if(chrome.identity) {
+        console.log(chrome.identity);
+        chrome.identity.getAuthToken({interactive: true}, (access_token) => {
+          console.log(access_token);
+          localGoogleLogin(access_token);
+        });  
+      }
+  }, []);
 
   const settings = {
     ...tagifySettings,
@@ -152,11 +150,8 @@ const App = () => {
         settings={settings}
         value={localState.value}
         showDropdown={localState.showDropdown}
-      />
-      		       
-      <input type="text" />
-    
-      <Button onClick={save}>Save to tagit</Button>
+      />    
+      <Button onClick={save}>SAVE</Button>
     </Wrapper>
   );
 }
