@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@yaireo/tagify": "^2.31.4",
+    "@yaireo/tagify": "^2.31.6",
     "axios": "^0.19.0",
     "loadash": "^1.0.0",
     "node-sass": "^4.13.0",

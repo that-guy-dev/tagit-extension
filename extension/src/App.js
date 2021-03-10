@@ -1,22 +1,33 @@
 import React, { useEffect, useState } from "react";
-import styled, { css } from 'styled-components';
+import styled, { css } from "styled-components";
 
 import Logo from "./assets/logo.svg";
 import Tags from "@yaireo/tagify/dist/react.tagify";
-import _ from 'lodash';
-import axios from 'axios';
+import _ from "lodash";
+import axios from "axios";
 
 /*global chrome*/
 
 const Wrapper = styled.div`
   background: #fff;
   width: 250px;
+  height: 174px;
   padding: 30px;
 `;
 
+const Saving = styled.div`
+  background: #fff;
+  width: 310px;
+  height: 174px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+`;
+
 const Tag = styled(Tags)`
-background: #fff;
-margin: 15px 0;
+  background: #fff;
+  margin: 15px 0;
   > span {
     padding-left: 0px;
   }
@@ -30,11 +41,11 @@ const Input = styled.input`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 96%;  
+  width: 96%;
 `;
 
 const Button = styled.div`
-  background: #5649CF;
+  background: #5649cf;
   display: flex;
   justify-content: center;
   height: 50px;
@@ -45,7 +56,6 @@ const Button = styled.div`
   cursor: pointer;
 `;
 
-
 const tagifySettings = {
   blacklist: ["xxx", "yyy", "zzz"],
   // maxTags: 6,
@@ -53,38 +63,31 @@ const tagifySettings = {
   addTagOnBlur: false,
   placeholder: "",
   dropdown: {
-    enabled   : 3,
-    maxItems  : 3
-  }
+    enabled: 2,
+    maxItems: 10,
+  },
 };
 
+const tagsArr = [];
 
-const callback = e =>
-  console.log(`%c ${e.type}: `, "background:#222; color:#bada55", e.detail);
+const callback = (e) => {
+  tagsArr.push(e.detail.data.value);
+};
 
-// callbacks props (for this demo, the same callback reference is assigned to every event type)
 const tagifyCallbacks = {
   add: callback,
   remove: callback,
-  input: callback,
+  // input: callback,
   edit: callback,
   invalid: callback,
-  click: callback
+  click: callback,
 };
 
-axios.defaults.baseURL = 'http://localhost:5000/';
-
-// fetch()
-  //   .then(data => {
-  //     const tags = data.map(tag => tag.tag);
-  //     setLocalState(lastState => ({
-  //       whitelist: tags
-  //     }))
-  //   });
+axios.defaults.baseURL = "http://localhost:5000/";
 
 const fetch = () => {
   return axios
-    .get('tag', { headers: { Authorization: `Bearer ${localStorage.token}` } })
+    .get("tag", { headers: { Authorization: `Bearer ${localStorage.token}` } })
     .then((response) => {
       const { tags } = response.data;
       const ordered = _.orderBy(tags);
@@ -93,83 +96,106 @@ const fetch = () => {
     .catch((error) => {
       console.log(error);
     });
-  }  
+};
 
-  const localGoogleLogin = access_token => {
-        axios
-          .post('/auth/google', { access_token })
-          .then((response) => {
-            console.log(response);
-            const token = response.headers['x-auth-token'];        
-            localStorage.setItem('token', token);
-            console.log({ token });
-          })
-          .catch((error) => {        
-            console.log(error);
-          });
-      };
+const localGoogleLogin = (access_token) => {
+  axios
+    .post("/auth/google", { access_token })
+    .then((response) => {
+      const token = response.headers["x-auth-token"];
+      localStorage.setItem("token", token);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
-const App = () => {      
+const App = () => {
   const [token, setToken] = useState();
-  const [tags, setTags] = useState("");
+  const [loader, setLoader] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [localState, setLocalState] = useState([]);
-  
-  useEffect(() => {       
-      if(chrome.identity) {
-        console.log(chrome.identity);
-        chrome.identity.getAuthToken({interactive: true}, (access_token) => {
-          console.log(access_token);
-          localGoogleLogin(access_token);
-        });  
-      }
-  }, []);
+
+  useEffect(() => {
+    setToken(localStorage.token);
+    fetch(localStorage.token).then((data) => {
+      const tags = data.map((tag) => tag.tag);
+      setLocalState({
+        whitelist: tags,
+      });
+    });
+    if (chrome.identity) {
+      console.log(chrome.identity);
+      chrome.identity.getAuthToken({ interactive: true }, (access_token) => {
+        localGoogleLogin(access_token);
+      });
+    }
+  }, []);
 
   const settings = {
     ...tagifySettings,
     ...localState,
-    callbacks: tagifyCallbacks
+    callbacks: tagifyCallbacks,
   };
 
-
   const save = () => {
-    chrome.tabs.query({currentWindow: true, active: true}, (tabs) => {      
+    chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
       const { url } = tabs[0];
-      
-      if(url) {
-         const data = tags.split(",").map(tag => tag.trim());
-         axios
-          .post('/article', { url, tags: JSON.stringify(data) },  { headers: { Authorization: `Bearer ${token}` } })
+      if (url) {
+        setLoader(true);
+        axios
+          .post(
+            "/article",
+            { url, tags: JSON.stringify(tagsArr) },
+            { headers: { Authorization: `Bearer ${token}` } }
+          )
           .then((response) => {
+            setLoader(false);
+            setSuccess(true);
             console.log(response);
           })
-          .catch((error) => {     
-            console.log(error);   
+          .catch((error) => {
+            console.log(error);
           });
-      }      
+      }
     });
-  }
+  };
 
-  if(!token)
-  {    
+  if (!token) {
     return (
       <Wrapper>
         <img src={Logo} />
-        <Button onClick={() => window.open('http://localhost:3000/login', '_blank')}>Login/register</Button>
+        <Button
+          onClick={() => window.open("http://localhost:3000/login", "_blank")}
+        >
+          Login/register
+        </Button>
       </Wrapper>
-    )
+    );
   }
-
+  if (loader) {
+    return <Saving>Saving content and tags</Saving>;
+  }
   return (
-    <Wrapper>
-      <img src={Logo} />
-      <Tag
-        settings={settings}
-        value={localState.value}
-        showDropdown={localState.showDropdown}
-      />    
-      <Button onClick={save}>SAVE</Button>
-    </Wrapper>
+    <>
+      {success ? (
+        <Saving>Saved</Saving>
+      ) : (
+        <Wrapper>
+          <img src={Logo} />
+          <div style={{ marginTop: "10px" }}>
+            Write your tags and then press tab :)
+          </div>
+          <Tag
+            settings={settings}
+            value={localState.value}
+            showDropdown={localState.showDropdown}
+          />
+          <Button onClick={save}>SAVE</Button>
+        </Wrapper>
+      )}
+    </>
   );
-}
+};
 
 export default App;
