@@ -57,8 +57,7 @@ const Button = styled.div`
 `;
 
 const tagifySettings = {
-  blacklist: ["xxx", "yyy", "zzz"],
-  // maxTags: 6,
+  blacklist: ["xxx", "yyy", "zzz"],  
   backspace: "edit",
   addTagOnBlur: false,
   placeholder: "",
@@ -77,13 +76,12 @@ const callback = (e) => {
 const tagifyCallbacks = {
   add: callback,
   remove: callback,
-  // input: callback,
   edit: callback,
   invalid: callback,
   click: callback,
 };
 
-axios.defaults.baseURL = "http://localhost:5000/";
+axios.defaults.baseURL = "https://tagit-api.herokuapp.com/";
 
 const fetch = () => {
   return axios
@@ -94,7 +92,7 @@ const fetch = () => {
       return ordered;
     })
     .catch((error) => {
-      console.log(error);
+      throw new Error('Error fetching tags');
     });
 };
 
@@ -106,7 +104,7 @@ const localGoogleLogin = (access_token) => {
       localStorage.setItem("token", token);
     })
     .catch((error) => {
-      console.log(error);
+      throw new Error('Error authenticating');
     });
 };
 
@@ -125,7 +123,6 @@ const App = () => {
       });
     });
     if (chrome.identity) {
-      console.log(chrome.identity);
       chrome.identity.getAuthToken({ interactive: true }, (access_token) => {
         localGoogleLogin(access_token);
       });
@@ -149,13 +146,12 @@ const App = () => {
             { url, tags: JSON.stringify(tagsArr) },
             { headers: { Authorization: `Bearer ${token}` } }
           )
-          .then((response) => {
+          .then(() => {
             setLoader(false);
             setSuccess(true);
-            console.log(response);
           })
           .catch((error) => {
-            console.log(error);
+            throw new Error('Error saving article');
           });
       }
     });
@@ -166,7 +162,7 @@ const App = () => {
       <Wrapper>
         <img src={Logo} />
         <Button
-          onClick={() => window.open("http://localhost:3000/login", "_blank")}
+          onClick={() => window.open("https://tagit-client.herokuapp.com/login", "_blank")}
         >
           Login/register
         </Button>
