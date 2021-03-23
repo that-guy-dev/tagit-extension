@@ -2,12 +2,11 @@
     "name": "Tagit extension",
     "version": "1.0.0",
     "manifest_version": 2,
-    "key": "ejfcngmflihodglkhhgchafaejipfmmm",
     "description": "The official tagit extension, save and view later",
     "homepage_url": "http://tagit.io",
     "content_security_policy": "font-src 'self';frame-src 'self';img-src 'self';manifest-src 'self';media-src 'self';object-src 'self';script-src 'self';style-src 'self' 'unsafe-inline';worker-src 'self';",
     "externally_connectable": {
-        "matches": ["http://localhost:3000/*", "https://tagit-client.herokuapp.com/*"]
+        "matches": ["https://tagit-client.herokuapp.com/*"]
     },
     "icons": {
         "16": "icons/icon16.png",
