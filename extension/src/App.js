@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
 import Logo from "./assets/logo.svg";
 import Tags from "@yaireo/tagify/dist/react.tagify";
@@ -8,21 +8,80 @@ import axios from "axios";
 
 /*global chrome*/
 
+const blob = keyframes`
+  from {
+    transform: rotate(15deg) translate(-20px,0px) skewX(25deg);
+  }
+  to {
+    transform: rotate(115deg) translate(20px,0px) skewX(-25deg);
+  }
+`;
+
+const blob2 = keyframes`
+  from {
+    transform: rotate(-15deg) translate(20px,0px) skewX(-25deg);
+
+  }
+  to {
+    transform: rotate(-115deg) translate(-20px,0px) skewX(25deg);
+  }
+`;
+
 const Wrapper = styled.div`
   background: #fff;
   width: 250px;
   height: 174px;
   padding: 30px;
+  background-image: linear-gradient(#6955e2, #28a6c8);
+  z-index: 1;
 `;
 
 const Saving = styled.div`
-  background: #fff;
-  width: 310px;
-  height: 174px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.5rem;
+  flex-direction: column;
+  color: white;
+  height: 100%;
+  font-size: 1.3em;
+  font-weight: bold;
+  position: relative;
+  z-index: 1;
+`;
+const View = styled.a`
+  font-size: 1em;
+  font-weight: 300;
+  position: relative;
+  z-index: 1;
+  color: white;
+  text-decoration: none;
+  margin-top: 13px;
+`;
+
+const EditBlobTop = styled.div`
+  width: 1500px;
+  height: 1500px;
+  background: #4384d3;
+  opacity: 0.6;
+  border-radius: 100%;
+  position: absolute;
+  top: -20%;
+  right: -20%;
+  animation: ${blob} 20s ease-in-out infinite;
+  animation-direction: alternate;
+`;
+
+const EditBlobBottom = styled.div`
+  width: 1000px;
+  height: 1000px;
+  border-radius: 100%;
+  background: rgb(91, 95, 203);
+  position: absolute;
+  bottom: -20%;
+  left: 0%;
+  opacity: 0.3;
+  animation: ${blob2} 30s ease-in-out infinite;
+        animation-direction: alternate;
 `;
 
 const Tag = styled(Tags)`
@@ -114,6 +173,7 @@ const App = () => {
   const [token, setToken] = useState();
   const [loader, setLoader] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [start, setStart] = useState(true);
   const [localState, setLocalState] = useState([]);
 
   useEffect(() => {
@@ -142,6 +202,7 @@ const App = () => {
     chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
       const { url } = tabs[0];
       if (url) {
+        setStart(false)
         setLoader(true);
         axios
           .post(
@@ -170,21 +231,28 @@ const App = () => {
         >
           Login/register
         </Button>
+        <EditBlobTop />
+      <EditBlobBottom />
       </Wrapper>
     );
   }
-  if (loader) {
-    return <Saving>Saving content and tags</Saving>;
-  }
+  
   return (
-    <>
-      {success ? (
-        <Saving>Saved</Saving>
-      ) : (
-        <Wrapper>
+    <Wrapper>
+      {loader && <Saving>Saving content and tags</Saving>}
+      {success && (
+        <Saving>
+          <div>Saved 👍</div>
+          <View href="https://www.tagit.io/" target="_blank">
+            View on tagit.io
+          </View>
+        </Saving>
+      )}
+      {start && (
+        <div style={{ position: "relative", zIndex: "1" }}>
           <img src={Logo} />
-          <div style={{ marginTop: "10px" }}>
-            Write your tags and then press tab :)
+          <div style={{ marginTop: "10px", color: "#fff" }}>
+            Write your tags and then press tab.
           </div>
           <Tag
             settings={settings}
@@ -192,9 +260,11 @@ const App = () => {
             showDropdown={localState.showDropdown}
           />
           <Button onClick={save}>SAVE</Button>
-        </Wrapper>
+        </div>
       )}
-    </>
+      <EditBlobTop />
+      <EditBlobBottom />
+    </Wrapper>
   );
 };
 
