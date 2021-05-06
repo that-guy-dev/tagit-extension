@@ -217,7 +217,6 @@ const localGoogleLogin = (access_token) => {
       if (url) {
         setStart(false)
         setLoader(true);
-        console.log(tagsArr)
         axios
           .post(
             "/article",
