@@ -105,6 +105,8 @@ const Input = styled.input`
 
 const Button = styled.div`
   background: #5649cf;
+  position: relative;
+  z-index: 100000;
   display: flex;
   justify-content: center;
   height: 50px;
@@ -113,6 +115,13 @@ const Button = styled.div`
   font-weight: bold;
   letter-spacing: 1px;
   cursor: pointer;
+  ${({ disabled }) => css`
+    ${disabled &&
+    css`
+      cursor: default;
+      color: #ffffff54;
+    `}
+  `};
 `;
 
 const tagifySettings = {
@@ -127,10 +136,21 @@ const tagifySettings = {
   },
 };
 
-const tagsArr = [];
+
+
+const App = () => {
+  const [token, setToken] = useState();
+  const [loader, setLoader] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [start, setStart] = useState(true);
+  const [localState, setLocalState] = useState([]);
+  const [disabled, setDisabled] = useState(true);
+  const [tagsArr, setTagsArr] = useState([]);
+
 
 const callback = (e) => {
   tagsArr.push(e.detail.data.value);
+  tagsArr.length !== 0 ? setDisabled(false) : setDisabled(true)
 };
 
 const tagifyCallbacks = {
@@ -141,6 +161,7 @@ const tagifyCallbacks = {
   invalid: callback,
   click: callback,
 };
+
 
 axios.defaults.baseURL = "http://localhost:5000/";
 
@@ -169,12 +190,11 @@ const localGoogleLogin = (access_token) => {
     });
 };
 
-const App = () => {
-  const [token, setToken] = useState();
-  const [loader, setLoader] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [start, setStart] = useState(true);
-  const [localState, setLocalState] = useState([]);
+  const settings = {
+    ...tagifySettings,
+    ...localState,
+    callbacks: tagifyCallbacks,
+  };
 
   useEffect(() => {
     setToken(localStorage.token);
@@ -185,18 +205,11 @@ const App = () => {
       });
     });
     if (chrome.identity) {
-      console.log(chrome.identity);
       chrome.identity.getAuthToken({ interactive: true }, (access_token) => {
         localGoogleLogin(access_token);
       });
     }
   }, []);
-
-  const settings = {
-    ...tagifySettings,
-    ...localState,
-    callbacks: tagifyCallbacks,
-  };
 
   const save = () => {
     chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -204,6 +217,7 @@ const App = () => {
       if (url) {
         setStart(false)
         setLoader(true);
+        console.log(tagsArr)
         axios
           .post(
             "/article",
@@ -213,7 +227,6 @@ const App = () => {
           .then((response) => {
             setLoader(false);
             setSuccess(true);
-            console.log(response);
           })
           .catch((error) => {
             console.log(error);
@@ -222,11 +235,11 @@ const App = () => {
     });
   };
 
-  if (!token) {
+  if (token === undefined) {
     return (
       <Wrapper>
-        <img src={Logo} />
-        <Button
+        <img src={Logo} style={{ position: 'relative', zIndex: '100000'}} />
+        <Button style={{marginTop: '45px'}}
           onClick={() => window.open("http://localhost:3000/login", "_blank")}
         >
           Login/register
@@ -259,7 +272,7 @@ const App = () => {
             value={localState.value}
             showDropdown={localState.showDropdown}
           />
-          <Button onClick={save}>SAVE</Button>
+          <Button disabled={disabled} onClick={!disabled && save}>SAVE</Button>
         </div>
       )}
       <EditBlobTop />
