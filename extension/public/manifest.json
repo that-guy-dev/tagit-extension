@@ -7,7 +7,7 @@
     "homepage_url": "http://tagit.io",
     "content_security_policy": "font-src 'self';frame-src 'self';img-src 'self';manifest-src 'self';media-src 'self';object-src 'self';script-src 'self';style-src 'self' 'unsafe-inline';worker-src 'self';",
     "externally_connectable": {
-        "matches": ["http://localhost:3000/*", "https://tagit-client.herokuapp.com/*"]
+        "matches": ["http://localhost:3000/*", "https://tagit-client.herokuapp.com/*", "https://tagit.io/*"]
     },
     "icons": {
         "16": "icons/icon16.png",
@@ -33,10 +33,7 @@
         "storage",
         "tabs",
         "chrome://favicon/",
-        "idle",
-        "contextMenus",
         "http://localhost:5000/*",
-        "https://tagit-api.herokuapp.com/*",
-        "tagit.io"
+        "https://tagit-api.herokuapp.com/*"
     ]
 }

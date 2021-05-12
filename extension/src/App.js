@@ -163,7 +163,7 @@ const tagifyCallbacks = {
 };
 
 
-axios.defaults.baseURL = "http://localhost:5000/";
+axios.defaults.baseURL = "https://tagit-api.herokuapp.com/";
 
 const fetch = () => {
   return axios
@@ -239,7 +239,7 @@ const localGoogleLogin = (access_token) => {
       <Wrapper>
         <img src={Logo} style={{ position: 'relative', zIndex: '100000'}} />
         <Button style={{marginTop: '45px'}}
-          onClick={() => window.open("http://localhost:3000/login", "_blank")}
+          onClick={() => window.open("https://tagit.io/login", "_blank")}
         >
           Login/register
         </Button>
