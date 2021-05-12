@@ -30,7 +30,7 @@ const blob2 = keyframes`
 const Wrapper = styled.div`
   background: #fff;
   width: 250px;
-  height: 174px;
+  min-height: 174px;
   padding: 30px;
   background-image: linear-gradient(#6955e2, #28a6c8);
   z-index: 1;
@@ -130,6 +130,7 @@ const tagifySettings = {
   backspace: "edit",
   addTagOnBlur: false,
   placeholder: "",
+  autofocus: true,
   dropdown: {
     enabled: 2,
     maxItems: 10,
@@ -159,7 +160,7 @@ const tagifyCallbacks = {
   // input: callback,
   edit: callback,
   invalid: callback,
-  click: callback,
+  click: callback
 };
 
 
