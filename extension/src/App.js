@@ -30,10 +30,13 @@ const blob2 = keyframes`
 const Wrapper = styled.div`
   background: #fff;
   width: 250px;
-  min-height: 174px;
+  min-height: 180px;
   padding: 30px;
   background-image: linear-gradient(#6955e2, #28a6c8);
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Saving = styled.div`
@@ -81,7 +84,7 @@ const EditBlobBottom = styled.div`
   left: 0%;
   opacity: 0.3;
   animation: ${blob2} 30s ease-in-out infinite;
-        animation-direction: alternate;
+  animation-direction: alternate;
 `;
 
 const Tag = styled(Tags)`
@@ -137,8 +140,6 @@ const tagifySettings = {
   },
 };
 
-
-
 const App = () => {
   const [token, setToken] = useState();
   const [loader, setLoader] = useState(false);
@@ -148,48 +149,48 @@ const App = () => {
   const [disabled, setDisabled] = useState(true);
   const [tagsArr, setTagsArr] = useState([]);
 
+  const callback = (e) => {
+    tagsArr.push(e.detail.data.value);
+    tagsArr.length !== 0 ? setDisabled(false) : setDisabled(true);
+  };
 
-const callback = (e) => {
-  tagsArr.push(e.detail.data.value);
-  tagsArr.length !== 0 ? setDisabled(false) : setDisabled(true)
-};
+  const tagifyCallbacks = {
+    add: callback,
+    remove: callback,
+    // input: callback,
+    edit: callback,
+    invalid: callback,
+    click: callback,
+  };
 
-const tagifyCallbacks = {
-  add: callback,
-  remove: callback,
-  // input: callback,
-  edit: callback,
-  invalid: callback,
-  click: callback
-};
+  axios.defaults.baseURL = "https://tagit-api.herokuapp.com/";
 
+  const fetch = () => {
+    return axios
+      .get("tag", {
+        headers: { Authorization: `Bearer ${localStorage.token}` },
+      })
+      .then((response) => {
+        const { tags } = response.data;
+        const ordered = _.orderBy(tags);
+        return ordered;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-axios.defaults.baseURL = "https://tagit-api.herokuapp.com/";
-
-const fetch = () => {
-  return axios
-    .get("tag", { headers: { Authorization: `Bearer ${localStorage.token}` } })
-    .then((response) => {
-      const { tags } = response.data;
-      const ordered = _.orderBy(tags);
-      return ordered;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-
-const localGoogleLogin = (access_token) => {
-  axios
-    .post("/auth/google", { access_token })
-    .then((response) => {
-      const token = response.headers["x-auth-token"];
-      localStorage.setItem("token", token);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+  const localGoogleLogin = (access_token) => {
+    axios
+      .post("/auth/google", { access_token })
+      .then((response) => {
+        const token = response.headers["x-auth-token"];
+        localStorage.setItem("token", token);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const settings = {
     ...tagifySettings,
@@ -216,7 +217,7 @@ const localGoogleLogin = (access_token) => {
     chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
       const { url } = tabs[0];
       if (url) {
-        setStart(false)
+        setStart(false);
         setLoader(true);
         axios
           .post(
@@ -238,18 +239,19 @@ const localGoogleLogin = (access_token) => {
   if (token === undefined) {
     return (
       <Wrapper>
-        <img src={Logo} style={{ position: 'relative', zIndex: '100000'}} />
-        <Button style={{marginTop: '45px'}}
+        <img src={Logo} style={{ position: "relative", zIndex: "100000" }} />
+        <Button
+          style={{ marginTop: "45px" }}
           onClick={() => window.open("https://tagit.io/login", "_blank")}
         >
           Login/register
         </Button>
         <EditBlobTop />
-      <EditBlobBottom />
+        <EditBlobBottom />
       </Wrapper>
     );
   }
-  
+
   return (
     <Wrapper>
       {loader && <Saving>Saving content and tags</Saving>}
@@ -262,7 +264,7 @@ const localGoogleLogin = (access_token) => {
         </Saving>
       )}
       {start && (
-        <div style={{ position: "relative", zIndex: "1" }}>
+        <div style={{ position: "relative", zIndex: "1", width: '100%' }}>
           <img src={Logo} />
           <div style={{ marginTop: "10px", color: "#fff" }}>
             Write your tags and then press tab.
@@ -272,7 +274,9 @@ const localGoogleLogin = (access_token) => {
             value={localState.value}
             showDropdown={localState.showDropdown}
           />
-          <Button disabled={disabled} onClick={!disabled && save}>SAVE</Button>
+          <Button disabled={disabled} onClick={!disabled && save}>
+            SAVE
+          </Button>
         </div>
       )}
       <EditBlobTop />
